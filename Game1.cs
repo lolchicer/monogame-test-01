@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,13 +7,17 @@ namespace monogametest;
 
 public class Game1 : Game
 {
-    private Texture2D _sprite_0001Texture;
-
     private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
+    private List<Texture2D> _textures = new();
+
+    private Level _level;
 
     public Game1()
     {
+        _level = new Level(this);
+        _level.Entities.AddRange(new[] {
+            new Eviscerator(this)
+        });
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -21,22 +26,29 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        
+
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        foreach (var entity in _level.Entities)
+        {
+            entity.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            entity.SpriteTexture = Content.Load<Texture2D>($"Sprites/{entity.SpriteTextureName}");
+        };
 
         // TODO: use this.Content to load your game content here
-        _sprite_0001Texture = Content.Load<Texture2D>("Sprites/Sprite-0001");
+
+        base.LoadContent();
     }
 
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
+
+        _level.Update(gameTime);
 
         // TODO: Add your update logic here
 
@@ -46,11 +58,9 @@ public class Game1 : Game
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
+        _level.Draw(gameTime);
 
         // TODO: Add your drawing code here
-        _spriteBatch.Begin();
-        _spriteBatch.Draw(_sprite_0001Texture, new Vector2(0, 0), Color.White);
-        _spriteBatch.End();
 
         base.Draw(gameTime);
     }
