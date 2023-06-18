@@ -9,6 +9,7 @@ public abstract class Entity : DrawableGameComponent
     private Mechanics _mechanics;
     private ICollection<Affector> _affectors;
     private Player _player;
+    private Level _level;
 
     public abstract string SpriteTextureName { get; }
 
@@ -40,14 +41,16 @@ public abstract class Entity : DrawableGameComponent
         base.Draw(gameTime);
     }
 
-    public Entity(Game game) : base(game)
+    public Entity(Level level) : base(level.Game)
     {
-        var mechanics = new Mechanics(game);
+        var mechanics = new Mechanics(level.Game);
         var input = new Input(mechanics);
         
+        _level = level;
         _mechanics = mechanics;
         _affectors = new Affector[] {
             new Friction(_mechanics),
+            new Collision(_mechanics, _level.CollisionMeta, new Vector2() { X = 10, Y = 10 }),
             input
         };
         _player = new(input);

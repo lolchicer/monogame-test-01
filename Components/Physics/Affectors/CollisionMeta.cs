@@ -8,8 +8,8 @@ public class CollisionMeta
 {
     public List<Collision> Collisions { get; } = new();
 
-    public IEnumerable<Rectangle> GetOutside(Collision excludedCollision)
+    public IEnumerable<Vector2> GetOutside(Collision excludedCollision)
     {
-        return from collision in Collisions where collision != excludedCollision select collision.Box;
+        return from collision in Collisions where collision != excludedCollision select collision.BoxSize;
     }
 }

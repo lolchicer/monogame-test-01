@@ -16,7 +16,7 @@ public class Game1 : Game
     {
         _level = new Level(this);
         _level.Entities.AddRange(new[] {
-            new Eviscerator(this)
+            new Eviscerator(_level)
         });
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
