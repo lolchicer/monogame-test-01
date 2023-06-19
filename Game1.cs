@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,10 +15,16 @@ public class Game1 : Game
 
     public Game1()
     {
-        _level = new Level(this);
-        _level.Entities.AddRange(new[] {
-            new Eviscerator(_level)
-        });
+        var player = new Player(this);
+        var level = new Level(this, player);
+        var entities = new Entity[] {
+            new Eviscerator(level, player),
+            new Eviscerator(level)
+        };
+
+        level.Entities.AddRange(entities);
+
+        _level = level;
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;

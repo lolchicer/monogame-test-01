@@ -9,4 +9,6 @@ public class Eviscerator : Entity
 
     public Eviscerator(Level _level)
     : base(_level) { }
+    public Eviscerator(Level _level, Player player)
+    : base(_level, player) { }
 }

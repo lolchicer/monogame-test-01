@@ -6,7 +6,7 @@ namespace monogametest;
 
 public class Player : GameComponent
 {
-    private Input _input;
+    public List<Input> Inputs { get; } = new();
 
     // стоит ли писать мне в этом названии Input 🤔
     private void SetDirections()
@@ -24,7 +24,7 @@ public class Player : GameComponent
         if (keyboadrdState.IsKeyDown(Keys.D))
             directions.Add(Input.Direction.Right);
 
-        _input.Directions.AddRange(directions);
+        Inputs.ForEach(input => input.Directions.AddRange(directions));
     }
 
     public override void Update(GameTime gameTime)
@@ -34,8 +34,5 @@ public class Player : GameComponent
         base.Update(gameTime);
     }
 
-    public Player(Input input) : base(input.Game)
-    {
-        _input = input;
-    }
+    public Player(Game game) : base(game) { }
 }

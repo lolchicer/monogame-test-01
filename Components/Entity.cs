@@ -8,7 +8,6 @@ public abstract class Entity : DrawableGameComponent
 {
     private Mechanics _mechanics;
     private ICollection<Affector> _affectors;
-    private Player _player;
     private Level _level;
 
     public abstract string SpriteTextureName { get; }
@@ -19,7 +18,6 @@ public abstract class Entity : DrawableGameComponent
 
     public override void Update(GameTime gameTime)
     {
-        _player.Update(gameTime);
         foreach (var affector in _affectors)
             affector.Update(gameTime);
         _mechanics.Update(gameTime);
@@ -53,6 +51,21 @@ public abstract class Entity : DrawableGameComponent
             new Collision(_mechanics, _level.CollisionMeta, new Vector2() { X = 10, Y = 10 }),
             input
         };
-        _player = new(input);
+    }
+
+    // побочные эффекты для Player
+    public Entity(Level level, Player player) : base(level.Game)
+    {
+        var mechanics = new Mechanics(level.Game);
+        var input = new Input(mechanics);
+        player.Inputs.Add(input);
+        
+        _level = level;
+        _mechanics = mechanics;
+        _affectors = new Affector[] {
+            new Friction(_mechanics),
+            input,
+            new Collision(_mechanics, _level.CollisionMeta, new Vector2() { X = 10, Y = 10 })
+        };
     }
 }

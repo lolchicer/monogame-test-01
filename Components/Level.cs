@@ -5,6 +5,7 @@ namespace monogametest;
 
 public class Level : DrawableGameComponent
 {
+    private Player _player;
     public CollisionMeta CollisionMeta { get; } = new();
     public List<Entity> Entities { get; } = new();
 
@@ -22,10 +23,14 @@ public class Level : DrawableGameComponent
 
     public override void Draw(GameTime gameTime)
     {
+        _player.Update(gameTime);
         Entities.ForEach(entity => entity.Draw(gameTime));
 
         base.Draw(gameTime);
     }
 
-    public Level(Game game) : base(game) { }
+    public Level(Game game, Player player) : base(game)
+    {
+        _player = player;
+    }
 }
