@@ -18,8 +18,10 @@ public abstract class Entity : DrawableGameComponent
 
     public override void Update(GameTime gameTime)
     {
-        foreach (var affector in _affectors)
+        foreach (var affector in _affectors) {
             affector.Update(gameTime);
+            Mechanics.Velocity += affector.Velocity;
+        }
         Mechanics.Update(gameTime);
 
         base.Update(gameTime);

@@ -9,14 +9,14 @@ public class Collision : Affector
     public Mechanics Mechanics => _mechanics;
     public Vector2 BoxSize { get; }
 
-    public override void Update(GameTime gameTime)
+    protected override void UpdateVelocity(GameTime gameTime)
     {
         foreach (var collisionBox in _meta.GetOutside(this))
             if (collisionBox.Intersects(
                 new Rectangle(
                     (_mechanics.Position + _mechanics.Velocity).ToPoint(),
                     BoxSize.ToPoint())))
-                _mechanics.Velocity = new() { X = 0, Y = 0 };
+                _velocity = -_mechanics.Velocity;
     }
 
     // конструктор с побочными эффектами
