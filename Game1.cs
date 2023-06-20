@@ -21,6 +21,7 @@ public class Game1 : Game
             new Eviscerator(level, player),
             new Eviscerator(level)
         };
+        entities[0].Mechanics.Position = new Vector2(50, 50);
 
         level.Entities.AddRange(entities);
 

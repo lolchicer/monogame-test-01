@@ -6,7 +6,6 @@ namespace monogametest;
 
 public abstract class Entity : DrawableGameComponent
 {
-    private Mechanics _mechanics;
     private ICollection<Affector> _affectors;
     private Level _level;
 
@@ -14,13 +13,14 @@ public abstract class Entity : DrawableGameComponent
 
     public SpriteBatch SpriteBatch { get; set; }
     public Texture2D SpriteTexture { get; set; }
-    public Vector2 Position => _mechanics.Position;
+    public Mechanics Mechanics { get; }
+    public Vector2 Position => Mechanics.Position;
 
     public override void Update(GameTime gameTime)
     {
         foreach (var affector in _affectors)
             affector.Update(gameTime);
-        _mechanics.Update(gameTime);
+        Mechanics.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -43,12 +43,12 @@ public abstract class Entity : DrawableGameComponent
     {
         var mechanics = new Mechanics(level.Game);
         var input = new Input(mechanics);
-        
+
         _level = level;
-        _mechanics = mechanics;
+        Mechanics = mechanics;
         _affectors = new Affector[] {
-            new Friction(_mechanics),
-            new Collision(_mechanics, _level.CollisionMeta, new Vector2() { X = 10, Y = 10 }),
+            new Friction(Mechanics),
+            new Collision(Mechanics, _level.CollisionMeta, new Vector2() { X = 10, Y = 10 }),
             input
         };
     }
@@ -59,13 +59,13 @@ public abstract class Entity : DrawableGameComponent
         var mechanics = new Mechanics(level.Game);
         var input = new Input(mechanics);
         player.Inputs.Add(input);
-        
+
         _level = level;
-        _mechanics = mechanics;
+        Mechanics = mechanics;
         _affectors = new Affector[] {
-            new Friction(_mechanics),
+            new Friction(Mechanics),
             input,
-            new Collision(_mechanics, _level.CollisionMeta, new Vector2() { X = 10, Y = 10 })
+            new Collision(Mechanics, _level.CollisionMeta, new Vector2() { X = 10, Y = 10 })
         };
     }
 }
