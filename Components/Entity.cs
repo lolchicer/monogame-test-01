@@ -1,13 +1,31 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace monogametest;
 
 public abstract class Entity : DrawableGameComponent
 {
-    private ICollection<Affector> _affectors;
+    protected enum SpriteState
+    {
+        Idle,
+        Walking
+    }
+
+    private IEnumerable<Affector> _affectors;
     private Level _level;
+
+    // _
+    protected SpriteState SpriteState_
+    {
+        get
+        {
+            if (_affectors.First(affector => affector is Input).Velocity != new Vector2() { X = 0, Y = 0 })
+                return SpriteState.Walking;
+            return SpriteState.Idle;
+        }
+    }
 
     public abstract string SpriteTextureName { get; }
 
@@ -18,7 +36,8 @@ public abstract class Entity : DrawableGameComponent
 
     public override void Update(GameTime gameTime)
     {
-        foreach (var affector in _affectors) {
+        foreach (var affector in _affectors)
+        {
             affector.Update(gameTime);
             Mechanics.Velocity += affector.Velocity;
         }
@@ -35,7 +54,17 @@ public abstract class Entity : DrawableGameComponent
     public override void Draw(GameTime gameTime)
     {
         SpriteBatch.Begin();
-        SpriteBatch.Draw(SpriteTexture, Position, Color.White);
+        switch (SpriteState_)
+        {
+            case SpriteState.Idle:
+                SpriteBatch.Draw(SpriteTexture, Position, Color.White);
+                break;
+            case SpriteState.Walking:
+                SpriteBatch.Draw(SpriteTexture, Position, Color.Red);
+                break;
+            default:
+                break;
+        }
         SpriteBatch.End();
 
         base.Draw(gameTime);
