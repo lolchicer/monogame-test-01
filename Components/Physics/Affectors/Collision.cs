@@ -12,9 +12,10 @@ public class Collision : Affector
     public override void Update(GameTime gameTime)
     {
         foreach (var collisionBox in _meta.GetOutside(this))
-            if (collisionBox.Contains(
-                _mechanics.Position.X + _mechanics.Velocity.X,
-                _mechanics.Position.Y + _mechanics.Velocity.Y))
+            if (collisionBox.Intersects(
+                new Rectangle(
+                    (_mechanics.Position + _mechanics.Velocity).ToPoint(),
+                    BoxSize.ToPoint())))
                 _mechanics.Velocity = new() { X = 0, Y = 0 };
     }
 
