@@ -27,10 +27,13 @@ public abstract class Entity : DrawableGameComponent
         }
     }
 
-    public abstract string SpriteTextureName { get; }
+    public abstract string IdleTextureName { get; }
+    public abstract string SprintingTextureName { get; }
+    public abstract int SprintingTexturesCount { get; }
 
     public SpriteBatch SpriteBatch { get; set; }
-    public Texture2D SpriteTexture { get; set; }
+    public Texture2D IdleTexture { get; set; }
+    public IAnimation SprintingTexture { get; set; }
     public Mechanics Mechanics { get; }
     public Vector2 Position => Mechanics.Position;
 
@@ -57,10 +60,10 @@ public abstract class Entity : DrawableGameComponent
         switch (SpriteState_)
         {
             case SpriteState.Idle:
-                SpriteBatch.Draw(SpriteTexture, Position, Color.White);
+                SpriteBatch.Draw(IdleTexture, Position, Color.White);
                 break;
             case SpriteState.Walking:
-                SpriteBatch.Draw(SpriteTexture, Position, Color.Red);
+                SpriteBatch.Draw(SprintingTexture.GetCurrentTexture(gameTime), Position, Color.White);
                 break;
             default:
                 break;

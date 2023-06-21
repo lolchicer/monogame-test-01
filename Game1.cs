@@ -43,7 +43,10 @@ public class Game1 : Game
         foreach (var entity in _level.Entities)
         {
             entity.SpriteBatch = new SpriteBatch(GraphicsDevice);
-            entity.SpriteTexture = Content.Load<Texture2D>($"Sprites/{entity.SpriteTextureName}");
+            entity.IdleTexture = Content.Load<Texture2D>($"Sprites/{entity.IdleTextureName}");
+            entity.SprintingTexture = new Animation(
+                from i in Enumerable.Range(1, entity.SprintingTexturesCount)
+                select Content.Load<Texture2D>($"Sprites/{entity.SprintingTextureName}{i}"));
         };
 
         // TODO: use this.Content to load your game content here
