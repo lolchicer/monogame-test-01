@@ -13,21 +13,23 @@ public class Input : Affector
         Right
     }
 
+    private const int _speed = 2;
+
     private void Accelerate(Direction direction)
     {
         switch (direction)
         {
             case Direction.Up:
-                _velocity += new Vector2 { X = 0, Y = -1 };
+                _velocity += new Vector2 { X = 0, Y = -_speed };
                 break;
             case Direction.Left:
-                _velocity += new Vector2 { X = -1, Y = 0 };
+                _velocity += new Vector2 { X = -_speed, Y = 0 };
                 break;
             case Direction.Down:
-                _velocity += new Vector2 { X = 0, Y = 1 };
+                _velocity += new Vector2 { X = 0, Y = _speed };
                 break;
             case Direction.Right:
-                _velocity += new Vector2 { X = 1, Y = 0 };
+                _velocity += new Vector2 { X = _speed, Y = 0 };
                 break;
             default:
                 break;
