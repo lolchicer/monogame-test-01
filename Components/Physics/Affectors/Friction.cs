@@ -4,7 +4,7 @@ namespace monogametest;
 
 public class Friction : Affector
 {
-    private const float _speed = 4;
+    private const float _speed = 2;
 
     protected override void UpdateVelocity(GameTime gameTime)
     {

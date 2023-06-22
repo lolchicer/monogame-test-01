@@ -20,20 +20,23 @@ public class Input : Affector
         switch (direction)
         {
             case Direction.Up:
-                _velocity += new Vector2 { X = 0, Y = -_speed };
+                _velocity += new Vector2 { X = 0, Y = -1 };
                 break;
             case Direction.Left:
-                _velocity += new Vector2 { X = -_speed, Y = 0 };
+                _velocity += new Vector2 { X = -1, Y = 0 };
                 break;
             case Direction.Down:
-                _velocity += new Vector2 { X = 0, Y = _speed };
+                _velocity += new Vector2 { X = 0, Y = 1 };
                 break;
             case Direction.Right:
-                _velocity += new Vector2 { X = _speed, Y = 0 };
+                _velocity += new Vector2 { X = 1, Y = 0 };
                 break;
             default:
                 break;
         }
+
+        _velocity.Normalize();
+        _velocity *= _speed;
     }
 
     private void Accelerate(IEnumerable<Direction> directions)
