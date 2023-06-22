@@ -8,7 +8,9 @@ public class Friction : Affector
 
     protected override void UpdateVelocity(GameTime gameTime)
     {
-        if (_mechanics.Velocity.Length() < _speed)
+        if (_mechanics.Velocity.Length() == 0)
+            return;
+        else if (_mechanics.Velocity.Length() < _speed)
             _velocity = -_mechanics.Velocity;
         else
         {
