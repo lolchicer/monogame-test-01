@@ -13,6 +13,14 @@ public abstract class Entity : DrawableGameComponent
         Walking
     }
 
+    protected enum SpriteDirection
+    {
+        Left,
+        Right
+    }
+
+    private SpriteDirection _spriteDirection = SpriteDirection.Right;
+
     private IEnumerable<Affector> _affectors;
     private Level _level;
 
@@ -21,9 +29,24 @@ public abstract class Entity : DrawableGameComponent
     {
         get
         {
+            // я когда-нибудь получу по башне за поиск свойств в коллекциях
             if (_affectors.First(affector => affector is Input).Velocity != new Vector2() { X = 0, Y = 0 })
                 return SpriteState.Walking;
             return SpriteState.Idle;
+        }
+    }
+
+    // чё ваще
+    protected SpriteDirection SpriteDirection_
+    {
+        get
+        {
+            var velocity = _affectors.First(affector => affector is Input).Velocity;
+            if (velocity.X < 0)
+                _spriteDirection = SpriteDirection.Left;
+            if (velocity.X > 0)
+                _spriteDirection = SpriteDirection.Right;
+            return _spriteDirection;
         }
     }
 
@@ -57,17 +80,27 @@ public abstract class Entity : DrawableGameComponent
     public override void Draw(GameTime gameTime)
     {
         SpriteBatch.Begin();
+        Texture2D texture;
         switch (SpriteState_)
         {
-            case SpriteState.Idle:
-                SpriteBatch.Draw(IdleTexture, Position, Color.White);
-                break;
             case SpriteState.Walking:
-                SpriteBatch.Draw(SprintingTexture.GetCurrentTexture(gameTime), Position, Color.White);
+                texture = SprintingTexture.GetCurrentTexture(gameTime);
                 break;
             default:
+                texture = IdleTexture;
                 break;
         }
+        switch (SpriteDirection_)
+        {
+            case SpriteDirection.Left:
+                SpriteBatch.Draw(texture, Position, null, Color.White, 0,
+                new() { X = 0, Y = 0 }, 1, SpriteEffects.FlipHorizontally, 1);
+                break;
+            default:
+                SpriteBatch.Draw(texture, Position, Color.White);
+                break;
+        }
+
         SpriteBatch.End();
 
         base.Draw(gameTime);
