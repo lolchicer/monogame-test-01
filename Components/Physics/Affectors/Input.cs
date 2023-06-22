@@ -13,7 +13,7 @@ public class Input : Affector
         Right
     }
 
-    private const int _speed = 2;
+    private const float _speed = 2;
 
     private void Accelerate(Direction direction)
     {
