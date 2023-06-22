@@ -34,9 +34,15 @@ public class Input : Affector
             default:
                 break;
         }
-
-        _velocity.Normalize();
-        _velocity *= _speed;
+        
+        if (_mechanics.Velocity.Length() > _speed)
+            // крутой аирконтроль чел
+            _velocity = new();
+        else
+        {
+            _velocity.Normalize();
+            _velocity *= _speed - _mechanics.Velocity.Length();
+        }
     }
 
     private void Accelerate(IEnumerable<Direction> directions)
