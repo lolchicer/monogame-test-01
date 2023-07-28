@@ -24,7 +24,9 @@ public class Polygon : IShape
     public Point Size { get => _size; set => _size = value; }
     public Point Center { get => _location + (_size * _size); }
 
-    public IList<Point> Points { get; } = new List<Point>();
+    // сбивал с поезда разрабов .net
+    List<Point> _points = new List<Point>();
+    public IList<Point> Points => _points;
 
     /* public static Rectangle Intersect(Rectangle value1, Rectangle value2);
     public static void Intersect(ref Rectangle value1, ref Rectangle value2, out Rectangle result);
@@ -87,5 +89,11 @@ public class Polygon : IShape
             if (!Contains(point))
                 return false;
         return true;
+    }
+
+    public Polygon(Point location, IEnumerable<Point> points)
+    {
+        Location = location;
+        _points.AddRange(from point in points select point - Location);
     }
 }
