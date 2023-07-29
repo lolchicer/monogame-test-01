@@ -22,8 +22,8 @@ public class Segment : IShape
     private bool IntersectsLine(Segment value)
     {
         var vector = (_point2 - _point1).ToVector2();
-        var valueVector1 = (value.Point1 - _point1).ToVector2();
-        var valueVector2 = (value.Point2 - _point1).ToVector2();
+        var valueVector1 = (value.Point1 + value.Location - _point1 - Location).ToVector2();
+        var valueVector2 = (value.Point2 + value.Location - _point1 - Location).ToVector2();
 
         var valueSign1 = Math.Sign(valueVector1.GetAngle() - vector.GetAngle());
         var valueSign2 = Math.Sign(valueVector2.GetAngle() - vector.GetAngle());
