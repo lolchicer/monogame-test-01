@@ -41,8 +41,8 @@ public class Polygon : IShape
                     Points[j],
                     Points[(j + 1) % Points.Count])
                     .Intersects(shape))
-                    return false;
-        return true;
+                    return true;
+        return false;
     }
 
     // что за кал нахуй???
