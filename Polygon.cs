@@ -24,7 +24,7 @@ public class Polygon : IShape
     public Point Size { get => _size; set => _size = value; }
     public Point Center { get => _location + (_size * _size); }
 
-    // сбивал с поезда разрабов .net
+    // сбивал с поезда авторов .net
     List<Point> _points = new List<Point>();
     public IList<Point> Points => _points;
 
