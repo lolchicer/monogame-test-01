@@ -46,7 +46,7 @@ public class Segment : IShape
         var valueSign1 = Math.Sign(valueVector1.GetAngle() - vector.GetAngle());
         var valueSign2 = Math.Sign(valueVector2.GetAngle() - vector.GetAngle());
 
-        return (valueSign1 == 0 && valueSign2 == 0);
+        return valueSign1 == 0 && valueSign2 == 0;
     }
 
     private bool Contains(Segment value) =>
@@ -78,21 +78,35 @@ public class Segment : IShape
     public Point Size { get => _size; set => _size = value; }
     public Point Center { get => _location + (_size * _size); }
 
-    public IList<Point> Points { get => new Point[] { _point1, _point2 }; }
+    private IList<Point> Points { get => new Point[] { _point1, _point2 }; }
+    public IList<IList<Point>> Perimeters { get => new IList<Point>[] { new Point[] { _point1, _point2 } }; }
 
     public Point Point1 { get => _point1; set => _point1 = value; }
     public Point Point2 { get => _point2; set => _point2 = value; }
 
-    public bool Intersects(IShape value)
+    private bool Intersects(IList<Point> points)
     {
         for (
-            int i = 0, nextI = i + 1, n = value.Points.Count();
+            int i = 0, nextI = i + 1, n = points.Count();
             i < n;
             i++, nextI = (i + 1) % n)
             if (Intersects(new Segment(
-                value.Points.ToArray()[i],
-                value.Points.ToArray()[nextI]
+                points.ToArray()[i],
+                points.ToArray()[nextI]
             )))
+                return true;
+        return false;
+    }
+
+    public bool Intersects(IShape value)
+    {
+        var perimeters = from perimeter in value.Perimeters
+                         select new List<Point>(
+                            from point in perimeter
+                            select point + (value.Location - Location));
+
+        foreach (var perimeter in perimeters)
+            if (Intersects(perimeter))
                 return true;
         return false;
     }
@@ -104,24 +118,46 @@ public class Segment : IShape
 
         var valueSign = Math.Sign(valueVector.GetAngle() - vector.GetAngle());
 
-        return (valueSign == 0);
+        return valueSign == 0;
     }
 
-    public bool Contains(IShape value)
+    public bool Contains(IList<Point> points)
     {
         for (
-            int i = 0, nextI = i + 1, n = Points.Count();
+            int i = 0, nextI = i + 1, n = points.Count();
             i < n;
             i++, nextI = (i + 1) % n)
             if (!Contains(new Segment(
-                Points.ToArray()[i],
-                Points.ToArray()[nextI]
+                points.ToArray()[i],
+                points.ToArray()[nextI]
             )))
                 return false;
         return true;
     }
 
-    public IList<ValueTuple<int, int, Point>> Intersections(IShape value)
+    // выглядит недостаточно последовательно
+    public bool Contains(IShape value)
+    {
+        var perimeters = from perimeter in value.Perimeters
+                         select new List<Point>(
+                            from point in perimeter
+                            select point + (value.Location - Location));
+
+        foreach (var perimeter in perimeters)
+            if (Intersects(perimeter))
+                return false;
+
+        foreach (var perimeter in perimeters)
+            if (Contains(perimeter))
+                return true;
+
+        return false;
+    }
+
+    // Item1 – вершина this перед пересечением
+    // Item2 – вершина value перед пересечением
+    // Item3 – значение пересечения
+    public IList<ValueTuple<int, int, Point>> IntersectionsNeighbours(IList<Point> points)
     {
         var intersections = new List<ValueTuple<int, int, Point>>();
 
@@ -130,14 +166,14 @@ public class Segment : IShape
             j < m;
             j++, nextJ = (j + 1) % m)
             for (
-                int i = 0, nextI = i + 1, n = value.Points.Count();
+                int i = 0, nextI = i + 1, n = points.Count();
                 i < n;
                 i++, nextI = (i + 1) % n)
             {
                 var segment = new Segment(
-                        Location + Points[j], Location + Points[nextJ]);
+                    Location + Points[j], Location + Points[nextJ]);
                 var valueSegment = new Segment(
-                    value.Location + value.Points[i], value.Points[nextI]);
+                    points[i], points[nextI]);
 
                 if (segment.Intersects(valueSegment))
                     intersections.Add((
@@ -148,36 +184,69 @@ public class Segment : IShape
         return intersections;
     }
 
-    public IShape IntersectionS(IShape value)
+    public IList<Point> Intersection(IList<Point> points)
+    {
+        return new List<Point>(from intersection in IntersectionsNeighbours(points) select intersection.Item3);
+    }
+
+    // value.Perimeters тоже должен быть заключён в Intersection(...), так как число периметров может меняться
+    // в таком случае не нужно было бы заключать perimeter в Intersection(...)
+    public IShape Intersection(IShape value)
     {
         return new Polygon(
             Location,
-            from intersection in Intersections(value) select intersection.Item3
+            new List<IList<Point>>(
+                from perimeter in value.Perimeters
+                select Intersection(
+                    new List<Point>(
+                        from point in perimeter
+                        select point + (value.Location - Location))))
         );
+    }
+
+    public IList<Point> Sum(IList<Point> points)
+    {
+        var newPoints = new List<Point>();
+
+        var intersections = IntersectionsNeighbours(points);
+
+        int j = intersections.Last().Item1 + 1;
+        int i = intersections.Last().Item2 + 1;
+
+        bool side = false;
+
+        if ((intersections.First().Item3 - Points[intersections.First().Item1]).ToVector2().GetAngle() <
+        (intersections.First().Item3 - Points[intersections.First().Item2]).ToVector2().GetAngle())
+            side = true;
+
+        foreach (var intersection in intersections)
+        {
+            if (side)
+            {
+                for (; j < intersection.Item1; j += 1 % Points.Count)
+                    newPoints.Add(Points[j]);
+            }
+            else
+            {
+                for (; i < intersection.Item2; i += 1 % Points.Count)
+                    newPoints.Add(Points[i]);
+            }
+            side = !side;
+        }
+
+        return newPoints;
     }
 
     public IShape Sum(IShape value)
     {
-        var newPoints = new List<Point>();
-
-        int j = 0;
-        int i = 0;
-
-        var intersections = Intersections(value);
-
-        for (
-            int intersectionI = 0, nextIntersectionI = intersectionI + 1, intersectionN = Points.Count();
-            intersectionI < intersectionN;
-            intersectionI++, nextIntersectionI = (intersectionI + 1) % intersectionN)
-            if (!Contains(value.Points[intersections[intersectionI].Item2]))
-            {
-                for (; j < intersections[intersectionI].Item1; j++)
-                    newPoints.Add(Points[j]);
-                for (; i < intersections[nextIntersectionI].Item2; i++)
-                    newPoints.Add(value.Points[i] - value.Location + Location);
-            }
-
-        return new Polygon(Location, newPoints);
+        return new Polygon(
+            Location,
+            new List<IList<Point>>(
+                from perimeter in value.Perimeters
+                select Sum(
+                    new List<Point>(
+                        from point in perimeter
+                        select point + (value.Location - Location)))));
     }
 
     public Segment(Point point1, Point point2)

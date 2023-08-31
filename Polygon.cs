@@ -91,7 +91,7 @@ public class Polygon : IShape
         return true;
     }
 
-    public Polygon(Point location, IEnumerable<Point> points)
+    public Polygon(Point location, IEnumerable<IEnumerable<Point>> points)
     {
         Location = location;
         _points.AddRange(from point in points select point - Location);

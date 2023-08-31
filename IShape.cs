@@ -19,7 +19,8 @@ public interface IShape // : IEquatable<IShape>
     public Point Size { get; set; }
     public Point Center { get; }
 
-    public IList<Point> Points { get; }
+    // почему каждый раз когда в программе затрагиваются множества становится можно умывать руки 
+    public IList<IList<Point>> Perimeters { get; }
 
     /* public static IShape Intersect(IShape value1, IShape value2);
         public static void Intersect(ref IShape value1, ref IShape value2, out IShape result);
@@ -50,5 +51,6 @@ public interface IShape // : IEquatable<IShape>
     /* public static bool operator ==(IShape a, IShape b);
     public static bool operator !=(IShape a, IShape b); */
 
-    public IShape Sum(IShape shape);
+    public IEnumerable<IShape> Intersections(IShape value);
+    public IShape Sum(IShape value);
 }
