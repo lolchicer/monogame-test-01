@@ -21,7 +21,7 @@ public class Segment : IShape
 
     private bool IntersectsLine(Segment value)
     {
-        var vector = (_point2 - _point1).ToVector2();
+        var vector = Vector.ToVector2();
         var valueVector1 = (value.Point1 + value.Location - _point1 - Location).ToVector2();
         var valueVector2 = (value.Point2 + value.Location - _point1 - Location).ToVector2();
 
@@ -39,7 +39,7 @@ public class Segment : IShape
 
     private bool ContainsLine(Segment value)
     {
-        var vector = (_point2 - _point1).ToVector2();
+        var vector = Vector.ToVector2();
         var valueVector1 = vector - (value.Point1 - _point1).ToVector2();
         var valueVector2 = vector - (value.Point2 - _point1).ToVector2();
 
@@ -84,6 +84,8 @@ public class Segment : IShape
     public Point Point1 { get => _point1; set => _point1 = value; }
     public Point Point2 { get => _point2; set => _point2 = value; }
 
+    public Point Vector { get => Point2; }
+
     private bool Intersects(IList<Point> points)
     {
         for (
@@ -113,7 +115,7 @@ public class Segment : IShape
 
     public bool Contains(Point value)
     {
-        var vector = (_point2 - _point1).ToVector2();
+        var vector = Vector.ToVector2();
         var valueVector = vector - (value - _point1).ToVector2();
 
         var valueSign = Math.Sign(valueVector.GetAngle() - vector.GetAngle());
