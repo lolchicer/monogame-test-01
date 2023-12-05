@@ -8,7 +8,7 @@ public class CollisionMeta
 {
     public List<Collision> Collisions { get; } = new();
 
-    public IEnumerable<IShape> GetOutside(Collision excludedCollision)
+    public IEnumerable<IPolygon> GetOutside(Collision excludedCollision)
     {
         return from collision in Collisions
                where collision != excludedCollision
