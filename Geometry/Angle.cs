@@ -3,27 +3,15 @@ using System;
 
 namespace monogametest;
 
-public static class Angle
+public class Angle
 {
-    public static class Arithmetics
+    private float _value;
+
+    public float Value { get => _value; set => _value = value % 360; }
+
+    public Angle() { }
+    public Angle(Vector2 vector)
     {
-        // 0 в cycle не вставлять
-        public static float Addition(float value1, int cycle1, float value2, int cycle2) =>
-            value1 * cycle1 + value2 * cycle2;
-
-        public static float Addition(float greater, float lesser) =>
-            Addition(greater, 2, lesser, 1);
-
-        public static float Subtraction(float value1, int cycle1, float value2, int cycle2) =>
-            Addition(value1, cycle1, -value2, cycle2);
-
-        public static float Subtraction(float greater, float lesser) =>
-            Subtraction(greater, 2, lesser, 1);
+        _value = (float)Math.Atan2(vector.Y, vector.X);
     }
-
-    public static float GetAngle(this Vector2 value) =>
-    (float)Math.Atan2(value.Y, value.X);
-
-    public static float GetAngle(this float value) =>
-    value % 360;
 }
