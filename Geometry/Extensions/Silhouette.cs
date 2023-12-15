@@ -8,11 +8,7 @@ namespace monogametest;
 public static class SihlouetteExtensions
 {
     // очень плохой способ описать множество
-    public static ValueTuple<float, float> Sihlouette(this IEnumerable<float> angles) =>
-    // это точно работает?
-    (angles.Min(), angles.Max());
-
-    public static ValueTuple<float, float> Sihlouette(this Vector2 value, Vector2 covering)
+    public static ValueTuple<Angle, Angle> Sihlouette(this Vector2 value, Vector2 covering)
     {
         var difference = covering - value;
 
