@@ -6,114 +6,65 @@ using System.Linq;
 
 namespace monogametest;
 
-public static class янехочувставлятьэтовContainsExtensionsпокачто
-{
-    public static bool Contains(this (float Angle, TupleAngleRange.Sign Sign) containing, float angle) =>
-    containing.Sign switch
-    {
-        // не хватает отдельного типа для углов
-        TupleAngleRange.Sign.Lesser => angle.GetAngle() <= containing.Angle,
-        TupleAngleRange.Sign.Greater => angle.GetAngle() >= containing.Angle,
-        _ => false
-    };
-
-
-
-
-
-    public static bool Contains(this IEnumerable<(float Lesser, float Greater)> containing, float angle) =>
-    containing.Any(tuple => tuple.Contains(angle));
-}
-
-public interface IAngleRange
-{
-    public enum Sign
-    {
-        Lesser,
-        Greater
-    }
-
-    public struct Constraint
-    {
-        public Angle Angle;
-        public Sign Sign;
-    }
-
-    public bool Contains(Angle value);
-    public IEnumerable<Constraint> Constraints { get; }
-}
-
-public class CompleteAngleRange : IAngleRange
-{
-    public bool Contains(Angle value) => true;
-
-    public IEnumerable<IAngleRange.Constraint> Constraints => new IAngleRange.Constraint[] {
-        new() { Angle = new() { Value = 0 }, Sign = IAngleRange.Sign.Greater },
-        new() { Angle = new() { Value = 360 }, Sign = IAngleRange.Sign.Lesser } };
-}
-
-public class TupleAngleRange : IAngleRange
-{
+// возможно можно оставить как IEnumerable<AngleTuple> в пространстве имён для SihlouetteExtensions
+public class AngleRange
+{   
+    // возможно можно оставить как ValueTuple<Angle, Angle>
     private struct AngleTuple
     {
         public Angle Lesser = new();
         public Angle Greater = new();
 
-        public bool Contains(Angle angle) =>
-        Lesser.Value <= angle.Value &&
-        Greater.Value >= angle.Value;
+        public bool Contains(IAngle value) =>
+        Lesser.Value <= value.Value &&
+        Greater.Value >= value.Value;
+
+        // это нужно оставить в IntersectsExtensions
+        public bool Intersects(AngleTuple value) =>
+        Lesser.Value <= value.Greater.Value ||
+        value.Lesser.Value <= Greater.Value;
 
         public AngleTuple() { }
     }
 
-    private List<(float, Sign)> _constraints = new();
-
     private List<AngleTuple> _tuples = new();
 
-    public TupleAngleRange() { }
-    private TupleAngleRange(IEnumerable<AngleTuple> tuples)
+    public AngleRange() { }
+    private AngleRange(IEnumerable<AngleTuple> tuples)
     {
         _tuples.AddRange(tuples);
     }
 
-    public bool Contains(Angle angle)
-    {
-        var constraints = new List<(float, Sign)>();
+    public bool Contains(IAngle angle) =>
+    _tuples.Any(tuple => tuple.Contains(angle));
 
-        constraints.AddRange(new[] { (0, Sign.Greater), (0, Sign.Lesser) })
-    }
-
-    public static bool Complete(this AngleTuple value1, AngleTuple value2)
+    // можно попробовать сделать методом расширения
+    // выглядит как лишнее звено в Sum(...)
+    private static AngleRange Sum(AngleTuple value1, AngleTuple value2) =>
+    value1.Intersects(value2) switch
     {
-        
-    }
-
-    // стоит избавиться от этого
-    private static IAngleRange Sum(this AngleTuple value1, AngleTuple value2) => (
-    value1.Lesser.Value <= value2.Greater.Value,
-    value2.Lesser.Value <= value2.Greater.Value) switch
-    {
-        (true, true) => new CompleteAngleRange(),
-        (false, false) => new TupleAngleRange(new[] { value1, value2 }),
-        _ => new TupleAngleRange(new[] { new AngleTuple() {
+        false => new AngleRange(new[] { value1, value2 }),
+        _ => new AngleRange(new[] { new AngleTuple() {
             Lesser = new Angle() { Value = Math.Min(value1.Lesser.Value, value2.Lesser.Value) },
             Greater = new Angle() { Value = Math.Max(value1.Greater.Value, value2.Greater.Value) } } })
     };
 
     // вэ тфэ
-    private static IAngleRange Sum(IAngleRange value)
+    // обращение к приватным методам объектов в статической функции
+    private static AngleRange Sum(AngleRange value)
     {
-        foreach (var value1 in value.Constraints)
+        foreach (var value1 in value._tuples)
         {
-            foreach (var value2 in value.Except(new[] { value1 }))
+            foreach (var value2 in value._tuples.Except(new[] { value1 }))
             {
                 var tupleSum = Sum(value1, value2);
-                if (tupleSum.Count() == 1)
+                // должна быть функция if и по функции на каждый вариант
+                if (tupleSum._tuples.Count == 1)
                 {
-                    var valueNext = new List<(float Lesser, float Greater)>();
-                    valueNext.AddRange(value.Except(new[] { value1, value2 }));
-                    valueNext.AddRange(tupleSum);
-                    return valueNext.Sum();
+                    var valueNext = new AngleRange();
+                    valueNext._tuples.AddRange(value._tuples.Except(new[] { value1, value2 }));
+                    valueNext._tuples.AddRange(tupleSum._tuples);
+                    return Sum(valueNext);
                 }
             }
         }
