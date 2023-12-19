@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace monogametest;
 
-public class Line : IAngleGiveable
+public class Line
 {
     private FlatAngle _angle;
     private float _c;

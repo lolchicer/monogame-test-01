@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace monogametest;
 
-public class Ray : IAngleGiveable
+public class Ray
 {
     private Vector2 _vector;
     private FlatAngle _angle;
