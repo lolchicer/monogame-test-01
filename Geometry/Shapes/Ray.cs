@@ -5,16 +5,16 @@ using System.Linq;
 
 namespace monogametest;
 
-public class Ray
+public class Ray : IAngleGiveable
 {
     private Vector2 _vector;
-    private float _angle;
+    private FlatAngle _angle;
 
     public Vector2 Location { get => _vector; set => _vector = value; }
     public Vector2 Vector { get => new(0, 0); set => _vector += value; }
-    public float Angle { get => _angle; set => _angle = value; }
+    public FlatAngle Angle { get => _angle; set => _angle = value; }
 
-    public Ray(Vector2 vector, float angle)
+    public Ray(Vector2 vector, FlatAngle angle)
     {
         _vector = vector;
         _angle = angle;

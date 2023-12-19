@@ -81,7 +81,7 @@ public class Segment : IPolygon
     public IList<Vector2> Vectors { get => new Vector2[] { Vector1, Vector2 }; }
     public IList<IList<Vector2>> Perimeters { get => new IList<Vector2>[] { new Vector2[] { Vector1, Vector2 } }; }
 
-    public Vector2 Vector1 { get => new Vector2(0, 0); set => _vector1 = Location + value; } // :tf:
+    public Vector2 Vector1 { get => new(0, 0); set => _vector1 = Location + value; } // :tf:
     public Vector2 Vector2 { get => _vector2; set => _vector2 = value; }
 
     public Vector2 Vector { get => Vector2; }

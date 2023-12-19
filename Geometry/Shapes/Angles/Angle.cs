@@ -3,11 +3,6 @@ using System;
 
 namespace monogametest;
 
-public interface IAngle
-{
-    public float Value { get; set; }
-}
-
 public class Angle : IAngle
 {
     private float _value;
@@ -28,29 +23,11 @@ public class Angle : IAngle
     public void Flatten() => _lap = 0;
 
     public Angle() { }
-    public Angle(FlatAngle flatAngle)
-    {
-        _value = flatAngle.Value;
-    }
     public Angle(Vector2 vector)
     {
         _value = (float)Math.Atan2(vector.Y, vector.X);
     }
-}
 
-public class FlatAngle : IAngle
-{
-    private float _value;
-
-    public float Value { get => _value; set => _value = value % 360; }
-
-    public FlatAngle() { }
-    public FlatAngle(Angle angle)
-    {
-        Value = angle.Value;
-    }
-    public FlatAngle(Vector2 vector)
-    {
-        _value = (float)Math.Atan2(vector.Y, vector.X);
-    }
+    // закрытое поле в статическом методе
+    public static implicit operator FlatAngle(Angle value) => new() { Value = value._value };
 }

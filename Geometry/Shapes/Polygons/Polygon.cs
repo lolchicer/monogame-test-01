@@ -25,7 +25,7 @@ public class Polygon : IPolygon
     public Vector2 Center { get => _location + (_size * _size); }
 
     // сбивал с поезда авторов .net
-    readonly List<IList<Vector2>> _perimeters = new List<IList<Vector2>>();
+    readonly List<IList<Vector2>> _perimeters = new();
     public IList<IList<Vector2>> Perimeters => _perimeters;
 
     /* public static Rectangle Intersect(Rectangle value1, Rectangle value2);
