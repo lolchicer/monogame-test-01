@@ -6,16 +6,16 @@ namespace monogametest;
 
 public static class SihlouettesExtensions
 {
-    private static IEnumerable<AngleRange> Sihlouettes(this IEnumerable<Vector2> perimeter, IPolygon covering) =>
+    private static IEnumerable<AngleRange> Sihlouettes(this IPolygon value, IEnumerable<Vector2> perimeter) =>
     from vector in perimeter
-    select vector.Sihlouette(covering);
+    select value.Sihlouette(vector);
 
-    public static IEnumerable<AngleRange> Sihlouettes(this IPolygon value, IPolygon covering)
+    public static IEnumerable<AngleRange> Sihlouettes(this IPolygon value, IPolygon view)
     {
         // кто бы мог подумать
         var sihlouettes = new List<AngleRange>();
-        foreach (var perimiter in value.Perimeters)
-            sihlouettes.AddRange(perimiter.Sihlouettes(covering));
+        foreach (var perimiter in view.Perimeters)
+            sihlouettes.AddRange(value.Sihlouettes(perimiter));
         return sihlouettes;
     }
 }
