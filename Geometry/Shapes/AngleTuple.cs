@@ -14,9 +14,13 @@ public partial class AngleRange
         public Angle Lesser = new();
         public Angle Greater = new();
 
-        public bool Contains(IAngle value) =>
+        public bool Contains(FlatAngle value) =>
         Lesser.Value <= value.Value &&
         Greater.Value >= value.Value;
+
+        public bool Contains(AngleTuple value) =>
+        Lesser.Value <= value.Lesser.Value &&
+        Greater.Value >= value.Greater.Value;
 
         // это нужно оставить в IntersectsExtensions
         public bool Intersects(AngleTuple value) =>

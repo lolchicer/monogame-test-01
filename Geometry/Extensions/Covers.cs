@@ -8,12 +8,10 @@ namespace monogametest;
 public static class CoversExtensions
 {
     public static bool Covers(this Vector2 value, Vector2 covering, Vector2 covered) =>
-    (covering - value).GetAngle() ==
-    (covered - value).GetAngle();
+    value.Sihlouette(covering).Contains(value.Sihlouette(covered));
 
-    public static bool Covers(this Vector2 value, Line covering, Vector2 covered) =>
-    covering.Side(value) !=
-    covering.Side(covered);
+    public static bool Covers(this Vector2 value, ISilhouetteGiving covering, Vector2 covered) =>
+    value.Sihlouette(covering).Contains(value.Sihlouette(covered));
 
     public static bool Covers(this Vector2 value, Ray covering, Vector2 covered) => 
     new Segment(value, covered).Side(covering.Angle) !=

@@ -31,6 +31,13 @@ public partial class AngleRange
         );
     }
 
-    public bool Contains(IAngle angle) =>
-    _tuples.Any(tuple => tuple.Contains(angle));
+    public bool Contains(FlatAngle value) =>
+    _tuples.Any(tuple => tuple.Contains(value));
+
+    public bool Contains(AngleRange value) =>
+    value._tuples.All(
+        valueTuple => _tuples.Any(
+            tuple => tuple.Contains(valueTuple)));
+    
+
 }
