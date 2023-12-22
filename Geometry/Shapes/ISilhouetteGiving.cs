@@ -4,5 +4,5 @@ namespace monogametest;
 
 public interface ISilhouetteGiving
 {
-    public AngleRange Sihlouette(Vector2 view);
+    public AngleRange Silhouette(Vector2 view);
 }

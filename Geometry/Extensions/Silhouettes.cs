@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace monogametest;
 
-public static class SihlouettesExtensions
+public static class SilhouettesExtensions
 {
     private static IEnumerable<AngleRange> Sihlouettes(this IPolygon value, IEnumerable<Vector2> perimeter) =>
     from vector in perimeter
-    select value.Sihlouette(vector);
+    select value.Silhouette(vector);
 
     public static IEnumerable<AngleRange> Sihlouettes(this IPolygon value, IPolygon view)
     {
