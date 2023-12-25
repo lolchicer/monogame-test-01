@@ -14,6 +14,7 @@ public static class ContainsExtensions
         var sides = value1.Sides(value2);
         var segments = value1.Segments();
         // внезапно в системе появились рёбра
+        // не определено, какое значение Side представляет внешнюю сторону, и какое – внутреннюю
         var containingEdges =
         from tuple in sides.Zip(segments)
         where

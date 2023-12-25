@@ -15,6 +15,10 @@ public partial class AngleRange
         _tuples.AddRange(tuples);
     }
     public AngleRange() { }
+    public AngleRange(Angle Lesser, Angle Greater)
+    {
+        _tuples.Add(new() { Lesser = Lesser, Greater = Greater });
+    }
     public AngleRange(Vector2 o, Vector2 vector)
     {
         _tuples.Add(new AngleTuple(o, vector));
@@ -38,6 +42,10 @@ public partial class AngleRange
     value._tuples.All(
         valueTuple => _tuples.Any(
             tuple => tuple.Contains(valueTuple)));
-    
 
+    // оавпрвкервпар
+    public AngleRange Range(AngleRange value)
+    {
+        throw new NotImplementedException();
+    }
 }

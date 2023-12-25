@@ -7,17 +7,18 @@ namespace monogametest;
 
 public static class SidesExtensions
 {
-    // не определено, какое значение Side представляет внешнюю сторону, и какое – внутреннюю
-    // для value можно выделить отдельный интерфейс
-    private static IEnumerable<Side> Sides(this IEnumerable<Vector2> perimeter, Vector2 value) =>
+    private static IEnumerable<(AngleRange Left, AngleRange Right)> Sides(this IEnumerable<Vector2> perimeter, AngleRange value) =>
     from segment in perimeter.Segments()
-    select new Line(segment).Side(new Angle(value));
+    select new Line(segment).Side(value);
 
-    public static IEnumerable<Side> Sides(this IPolygon value1, Vector2 value2)
+    public static IEnumerable<(AngleRange Left, AngleRange Right)> Sides(this IPolygon value1, AngleRange value2)
     {
-        var sides = new List<Side>();
+        var sides = new List<(AngleRange Left, AngleRange Right)>();
         foreach (var perimeter in value1.Perimeters)
             sides.AddRange(Sides(perimeter, value2));
         return sides;
     }
+
+    public static IEnumerable<Side> Sides(this IPolygon value1, ISilhouetteGiving value2) =>
+    Sides(value1, value2.Silhouette(value2));
 }
