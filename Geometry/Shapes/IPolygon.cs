@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public interface IPolygon : ISidesGiving // : IEquatable<IPolygon>
 {

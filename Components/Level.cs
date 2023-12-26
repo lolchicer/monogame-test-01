@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public class Level : DrawableGameComponent
 {

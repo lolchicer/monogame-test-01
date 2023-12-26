@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public class Ray
 {

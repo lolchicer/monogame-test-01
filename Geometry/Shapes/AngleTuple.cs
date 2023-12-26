@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public partial class AngleRange
 {

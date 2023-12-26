@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public class Friction : Affector
 {

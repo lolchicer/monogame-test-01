@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public interface ISidesGiving
 {

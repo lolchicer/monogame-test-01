@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 // возможно можно оставить как IEnumerable<AngleTuple> в пространстве имён для SihlouetteExtensions
 public partial class AngleRange

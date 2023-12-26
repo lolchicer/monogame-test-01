@@ -1,4 +1,4 @@
-namespace monogametest;
+namespace MonogameTest01;
 
 // так я и не понял по какой причине нельзя
 // из-за невозможности скастить IAngle во float я не могу сделать реализации IAngle структурами

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public class Segment : IPolygon
 {

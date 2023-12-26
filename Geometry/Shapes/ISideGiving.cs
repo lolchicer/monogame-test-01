@@ -1,4 +1,4 @@
-namespace monogametest;
+namespace MonogameTest01;
 
 public interface ISideGiving
 {

@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public class Input : Affector
 {

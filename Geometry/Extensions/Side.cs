@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public enum Side
 {
@@ -32,9 +32,9 @@ public static class SideExtensions
     public static Side Side(this FlatAngle value1, FlatAngle value2)
     => (value2.Value - value1.Value) switch
     {
-        < 180 => monogametest.Side.Left,
-        180 => monogametest.Side.Center,
-        _ => monogametest.Side.Right
+        < 180 => MonogameTest01.Side.Left,
+        180 => MonogameTest01.Side.Center,
+        _ => MonogameTest01.Side.Right
     };
 
     public static Side Side(this Line value1, FlatAngle value2) =>

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace monogametest;
+namespace MonogameTest01;
 
 public abstract class Entity : DrawableGameComponent
 {
