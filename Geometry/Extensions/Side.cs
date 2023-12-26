@@ -14,7 +14,6 @@ public enum Side
 
 public static class SideExtensions
 {
-    // нужно добавить Side.Center
     public static (AngleRange Left, AngleRange Right) Side(this Line value1, AngleRange value2) => (
         Left: value2.Range(
             new AngleRange(

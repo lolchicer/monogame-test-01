@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace monogametest;
 
-public interface IPolygon // : IEquatable<IPolygon>
+public interface IPolygon : ISidesGiving // : IEquatable<IPolygon>
 {
     /* public float X { get; set; }
     public float Y { get; set; }
