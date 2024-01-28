@@ -5,12 +5,15 @@ namespace MonogameTest01;
 
 public class Eviscerator : Entity
 {
-    public override string IdleTextureName => "entity-idle";
-    public override string SprintingTextureName => "entity-sprinting";
-    public override int SprintingTexturesCount => 4;
+    private static EntityDrawingConfig Config() => new()
+    {
+        IdleTextureName = "entity-idle",
+        SprintingTextureName = "entity-sprinting",
+        SprintingTexturesCount = 4
+    };
 
     public Eviscerator(Level _level)
-    : base(_level) { }
+    : base(Config(), _level) { }
     public Eviscerator(Level _level, Player player)
-    : base(_level, player) { }
+    : base(Config(), _level, player) { }
 }
