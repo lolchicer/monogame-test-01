@@ -15,14 +15,16 @@ public class Game1 : Game
 
     public Game1()
     {
-        var player = new Player(this);
-        var level = new Level(this, player);
+        var level = new Level(this);
         var entities = new Entity[] {
-            new Eviscerator(level, player),
+            new Eviscerator(level, level.Player),
             new Eviscerator(level)
         };
         entities[0].Mechanics.Position = new Vector2(50, 50);
-
+        entities[1].Mechanics.Position = new Vector2(50, 50);
+        entities[0].Health.Value = 6;
+        entities[1].Health.Value = 6;
+        
         level.Entities.AddRange(entities);
 
         _level = level;
@@ -42,11 +44,11 @@ public class Game1 : Game
     {
         foreach (var entity in _level.Entities)
         {
-            entity.EntityDrawer.SpriteBatch = new SpriteBatch(GraphicsDevice);
-            entity.EntityDrawer.IdleTexture = Content.Load<Texture2D>($"Sprites/{entity.EntityDrawer.Config.IdleTextureName}");
-            entity.EntityDrawer.SprintingTexture = new Animation(
-                from i in Enumerable.Range(1, entity.EntityDrawer.Config.SprintingTexturesCount)
-                select Content.Load<Texture2D>($"Sprites/{entity.EntityDrawer.Config.SprintingTextureName}{i}"));
+            entity.Drawer.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            entity.Drawer.IdleTexture = Content.Load<Texture2D>($"Sprites/{entity.DrawingConfig.IdleTextureName}");
+            entity.Drawer.SprintingTexture = new Animation(
+                from i in Enumerable.Range(1, entity.DrawingConfig.SprintingTexturesCount)
+                select Content.Load<Texture2D>($"Sprites/{entity.DrawingConfig.SprintingTextureName}{i}"));
         };
 
         // TODO: use this.Content to load your game content here

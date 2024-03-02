@@ -1,11 +1,8 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace MonogameTest01;
 
 public class Eviscerator : Entity
 {
-    private static EntityDrawingConfig Config() => new()
+    public override EntityDrawingConfig DrawingConfig => new()
     {
         IdleTextureName = "entity-idle",
         SprintingTextureName = "entity-sprinting",
@@ -13,7 +10,7 @@ public class Eviscerator : Entity
     };
 
     public Eviscerator(Level _level)
-    : base(Config(), _level) { }
+    : base(_level) { }
     public Eviscerator(Level _level, Player player)
-    : base(Config(), _level, player) { }
+    : base(_level, player) { }
 }
